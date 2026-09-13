@@ -73,3 +73,23 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+app.get("/public/info", (req, res) => {
+  res.status(200).json({
+    message: "This is a public endpoint",
+  });
+});
+
+// GET /protected/profile
+app.get("/protected/profile", (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Authorization token required",
+    });
+  }
+
+  return res.status(200).json({
+    message: "You reached the protected profile endpoint",
+  });
+});
